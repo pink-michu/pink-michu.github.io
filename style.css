@@ -9,48 +9,45 @@
     --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Nunito', sans-serif;
     color: var(--text-color);
     background-color: var(--bg-color);
+    /* Make sure your background path is correct */
     background-image: url('background.webp'); 
     background-size: cover;
     background-position: center center;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
-/* --- Particle Canvas --- */
-#particle-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
+#particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.main-container, footer { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;}
+.main-container { padding: 20px 0; } /* Remove side padding */
 
-/* --- Main content --- */
-.main-container, footer {
-    position: relative;
-    z-index: 1;
-    padding: 20px;
-    width: 100%;
+/* --- NEW: Card Slider --- */
+.card-slider {
     display: flex;
-    justify-content: center;
+    flex-wrap: nowrap; /* Ensures cards stay in a single line */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scroll-snap-type: x mandatory; /* Snaps cards into place */
+    
+    /* Hide scrollbar */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.card-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
 }
 
-/* --- Profile Card Styling --- */
 .profile-card {
     position: relative;
     background: var(--card-bg);
@@ -61,48 +58,23 @@ body {
     box-shadow: var(--shadow);
     padding: 2.5rem 2rem;
     text-align: center;
-    max-width: 380px;
-    width: 100%;
+    
+    /* Mobile sizing */
+    flex: 0 0 90vw; /* Don't grow, don't shrink, base width is 90% of viewport */
+    width: 90vw;
+    max-width: 380px; /* Still cap the max width */
+    margin: 0 5vw; /* Creates space between cards */
+    scroll-snap-align: center; /* Center the card when snapping */
 }
+/* Center the first and last card correctly */
+.card-slider .profile-card:first-child { margin-left: 5vw; }
+.card-slider .profile-card:last-child { margin-right: 5vw; }
 
-.view-counter {
-    position: absolute;
-    bottom: 15px;
-    left: 20px;
-    font-size: 0.8rem;
-    color: #555;
-    opacity: 0.7;
-}
-
-/* START: UPDATED ANIMATION STYLES */
-.top-animation-container {
-    position: relative; /* This is the key: it creates a positioning context */
-    width: 150px;
-    height: 150px;
-    margin: 0 auto; /* Center the container horizontally */
-    margin-top: -30px; /* Pull the animation up slightly */
-    margin-bottom: 0.5rem; /* Reduce space between animation and title */
-}
-
-/* A general style for both images inside the container */
-.top-animation {
-    position: absolute; /* This lifts the images so they can be layered */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-/* Use z-index to control which image is on top */
-.animation-subject {
-    z-index: 1; /* The bunny is at the back */
-}
-
-.animation-frame {
-    z-index: 2; /* The bakery items frame is on top */
-}
-/* END: UPDATED ANIMATION STYLES */
-
+.view-counter { position: absolute; bottom: 15px; left: 20px; font-size: 0.8rem; color: #555; opacity: 0.7; }
+.top-animation-container { position: relative; width: 150px; height: 150px; margin: 0 auto; margin-top: -30px; margin-bottom: 0.5rem; }
+.top-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.animation-subject { z-index: 1; }
+.animation-frame { z-index: 2; }
 
 h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .bio { font-size: 1rem; margin-bottom: 1rem; color: #555; }
@@ -121,12 +93,9 @@ h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .social-links a { color: #333; background-color: #fff; width: 40px; height: 40px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; text-decoration: none; font-size: 1.1rem; transition: transform 0.2s ease; }
 .social-links a:hover { transform: scale(1.1); }
 
-/* --- Footer --- */
-footer { position: absolute; bottom: 0; text-align: center; }
+footer { position: absolute; bottom: 0; text-align: center; padding: 20px; }
 .brand-name { font-family: 'Pacifico', cursive; font-size: 2.5rem; color: #222; line-height: 1; }
-.credit { font-size: 0.8rem; color: #555; }
 
-/* --- Volume Control Container & Slider --- */
 #volume-control-container { position: fixed; top: 20px; left: 20px; z-index: 10; display: flex; align-items: center; gap: 10px; }
 .icon-btn { background-color: rgba(255, 255, 255, 0.5); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); transition: transform 0.2s ease; flex-shrink: 0; }
 .icon-btn:hover { transform: scale(1.1); }
@@ -135,10 +104,54 @@ footer { position: absolute; bottom: 0; text-align: center; }
 #volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 #volume-slider::-moz-range-thumb { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-/* --- Responsive Design --- */
-@media (max-width: 480px) {
-    .profile-card { padding: 2rem 1.5rem; }
-    h1 { font-size: 2rem; }
-    .brand-name { font-size: 2rem; }
-    footer { position: relative; margin-top: 1rem; }
+/* --- NEW: Media Player Styles --- */
+.media-player {
+    position: relative;
+    z-index: 1;
+    width: 90vw;
+    max-width: 380px;
+    margin: 1.5rem auto 0; /* Add space above the player */
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    padding: 0 5px;
+}
+
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden; /* Ensures progress bar corners are rounded */
+}
+
+.progress-bar {
+    width: 0%; /* Initially no progress */
+    height: 100%;
+    background-color: #ff8fab; /* A pink color that fits the theme */
+    border-radius: 10px;
+}
+
+/* --- Responsive Overrides for Desktop --- */
+@media (min-width: 1200px) {
+    .card-slider {
+        overflow-x: visible; /* Disable scrolling on desktop */
+        gap: 2rem; /* Add space between cards */
+        padding: 0 20px;
+    }
+
+    .profile-card {
+        flex: 1; /* Allow cards to grow equally */
+        margin: 0; /* Remove mobile margins */
+    }
+    .card-slider .profile-card:first-child,
+    .card-slider .profile-card:last-child {
+        margin: 0; /* Reset margins */
+    }
 }
