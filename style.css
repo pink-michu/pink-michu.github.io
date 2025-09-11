@@ -15,7 +15,7 @@ body {
     font-family: 'Nunito', sans-serif;
     color: var(--text-color);
     background-color: var(--bg-color);
-    background-image: url('background3.jpeg'); 
+    background-image: url('background3.jpeg');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -25,6 +25,9 @@ body {
     align-items: center;
     min-height: 100vh;
     overflow: hidden; /* Prevent body scrolling */
+}
+html {
+    cursor: url("cursor.png") 30 15, default;
 }
 
 #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
@@ -47,7 +50,7 @@ body {
     flex-direction: column; /* Stack cards vertically */
     overflow-y: auto;       /* Enable VERTICAL scrolling */
     scroll-snap-type: y mandatory; /* Snap on the Y-axis */
-    
+
     /* The container needs a defined height to be scrollable */
     width: 100%;
     height: 70vh; /* Adjust this value to control how much space the cards take */
@@ -61,7 +64,10 @@ body {
 .card-slider::-webkit-scrollbar {
     display: none;
 }
-
+.gallery-icon {
+    width: 30%;
+    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.7));
+}
 .profile-card {
     position: relative;
     background: var(--card-bg);
@@ -79,12 +85,19 @@ body {
     scroll-snap-align: start;
 }
 
+.profile-card li {
+    margin-left: 1.5rem;
+    text-align: left;
+    font-size: 2rem;
+}
+
 .slideshow-container {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Makes the slideshow a perfect square */
+    aspect-ratio: 1 / 1.2; /* Makes the slideshow a perfect square */
     border-radius: var(--border-radius-inner);
     overflow: hidden; /* This is crucial - it hides the other images */
     margin-top: 1rem;
+    box-shadow: 0 0 15px 20px rgba(255, 255, 255, 0.7);
 }
 
 .slideshow-track {
@@ -112,17 +125,17 @@ body {
     order: -1;
 }
 
-.view-counter { position: absolute; bottom: 15px; left: 20px; font-size: 0.8rem; color: #555; opacity: 0.7; }
+.view-counter { position: absolute; bottom: 15px; left: 20px; font-size: 1.2rem; color: rgba(0, 0, 0, 0.7); opacity: 1.0; }
 .top-animation-container { position: relative; width: 150px; height: 150px; margin: 0 auto; margin-top: -30px; margin-bottom: 0.5rem; }
 .top-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.animation-subject { z-index: 1; }
+.animation-subject { z-index: 1; filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.7));}
 .animation-frame { z-index: 2; }
 h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .bio { font-size: 1rem; margin-bottom: 1rem; color: #555; }
 .location { font-size: 0.9rem; margin-bottom: 1.5rem; color: #555; }
 .location i { margin-right: 5px; }
 .profile-link { background: rgba(255, 255, 255, 0.5); border-radius: var(--border-radius-inner); padding: 10px; display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; text-align: left; }
-.profile-picture { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.profile-picture { width: 60px; height: 60px; border-radius: 50%; object-fit: cover;}
 .username { font-weight: 700; }
 .verified-icon { color: #1da1f2; margin: 0 2px 0 4px; }
 .fa-wand-magic-sparkles { color: #a78bfa; }
@@ -137,7 +150,7 @@ h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .social-links a[aria-label="Facebook"]:hover i { color: #fff; text-shadow: 0 0 5px #fa7294, 0 0 10px #fa7294, 0 0 20px #fa7294; }
 .social-links a[aria-label="Discord"]:hover i { color: #fff; text-shadow: 0 0 5px #fa7294, 0 0 10px #fa7294, 0 0 20px #fa7294; }
 
-footer { position: fixed; bottom: 0; text-align: center; padding: 10px; width: 100%; } /* Fixed footer for mobile */
+footer { position: fixed; bottom: 0; text-align: right; padding: 10px; width: 100%; } /* Fixed footer for mobile */
 .brand-name { font-family: 'Pacifico', cursive; font-size: 2rem; color: #222; line-height: 1; }
 
 .icon-btn { background-color: rgba(255, 255, 255, 0.5); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); transition: transform 0.2s ease; flex-shrink: 0; }
@@ -160,9 +173,11 @@ footer { position: fixed; bottom: 0; text-align: center; padding: 10px; width: 1
 .time-display { display: flex; justify-content: space-between; font-size: 0.8rem; color: #555; padding: 0 5px; margin-top: 0.5rem; }
 .progress-container { width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; cursor: pointer; overflow: hidden; }
 .progress-bar { width: 0%; height: 100%; background-color: #ff8fab; border-radius: 10px; }
-.icon-btn i { color: #f36e8f; transition: color 0.2s ease; }
-.icon-btn:hover i { color: #ff8fab; }
-
+.icon-btn i { color: #f03071; transition: color 0.2s ease; }
+.icon-btn:hover i { color: #ff74a1; }
+a, button, .icon-btn, .progress-container, .play-pause-btn, #volume-slider {
+    cursor: url('cursor2.png') 30 40, pointer;
+}
 /* --- Responsive Overrides for Desktop --- */
 @media (min-width: 1200px) {
     body {

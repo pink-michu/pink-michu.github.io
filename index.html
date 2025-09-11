@@ -1,115 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Michu's Page</title>
-    
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/avatars/639753897161916416/2e2892214122dbc022c0d410e7d9c38f.webp">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Michu's Page</title>
 
-    <canvas id="particle-canvas"></canvas>
+        <link rel="stylesheet" href="style.css" />
+        <link
+            rel="icon"
+            type="image/png"
+            href="https://cdn.discordapp.com/avatars/639753897161916416/2e2892214122dbc022c0d410e7d9c38f.webp"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap"
+            rel="stylesheet"
+        />
 
-    <audio id="bg-music" loop src="music.mp3"></audio>
-    
-    <main class="main-container">
-        <div class="card-slider">
-            <!-- Card 1 -->
-            <div class="profile-card">
-                <h2 style="font-size: 2rem; margin-bottom: 1rem;">About Me</h2>
-                <p>Best riven</p>
-                <p>Birthday 0502</p>
-                <p>Meat lover</p>
-                <p>Siêu mid địa cầu</p>
-                <p>Trùm top sv</p>
-                <p>Người được Riven chọn</p>
-                <p>Bán cơm sườn</p>
-                <p>Yêu khoa học</p>
-                <i class="fas fa-heart" style="font-size: 4rem; margin-top: 3rem; color: #ff8fab;"></i>
-            </div>
-            <!-- Card 2 (Main) -->
-            <div class="profile-card" id="main-card">
-                 <div class="view-counter"><i class="fas fa-eye"></i> 502</div>
-                <div class="top-animation-container">
-                    <img src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp" alt="Cute rabbit animation" class="top-animation animation-subject">
-                    <img src="https://cdn.discordapp.com/avatar-decoration-presets/a_1953da70cb693d9a27178eca180f8cb5.png" alt="Bakery decoration frame" class="top-animation animation-frame">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+    </head>
+    <body>
+        <canvas id="particle-canvas"></canvas>
+
+        <audio id="bg-music" loop src="music.mp3"></audio>
+
+        <main class="main-container">
+            <div class="card-slider">
+                <!-- Card 1 -->
+                <div class="profile-card">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem">
+                        About Me
+                    </h2>
+                    <ul>
+                        <li>Best riven</ul>
+                        <li>Birthday 0502</li>
+                        <li>Meat lover</li>
+                        <li>Siêu mid địa cầu</li>
+                        <li>Trùm top sv</li>
+                        <li>Người được Riven chọn</li>
+                        <li>Bán cơm sườn</li>
+                        <li>Yêu khoa học</p>
+                    </ul>
+
                 </div>
-                <h1>Michu</h1>
-                <p class="bio">You're the only one I love..</p>
-                <div class="location"><i class="fas fa-map-marker-alt"></i> Ho Chi Minh</div>
-                <div class="profile-link">
-                    <img src="https://cdn.discordapp.com/avatars/639753897161916416/2e2892214122dbc022c0d410e7d9c38f.webp" alt="Profile Picture" class="profile-picture">
-                    <div class="profile-info">
-                        <span class="username">kimminhchau <i class="fas fa-check-circle verified-icon"></i><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                        <div class="status"><i class="fab fa-spotify"></i><span>52 19 19 19 52</span></div>
+                <!-- Card 2 (Main) -->
+                <div class="profile-card" id="main-card">
+                    <div class="view-counter">
+                        <i class="fas fa-eye"></i> 502
                     </div>
-                </div>
-                <div class="social-links">
-                    <a href="https://facebook.com/shin.zeam" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://discord.com/users/639753897161916416" aria-label="Discord" target="_blank"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-            <!-- Card 3 -->
-            <div class="profile-card">
-                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Gallery</h2>
-                <!-- START: NEW SLIDESHOW STRUCTURE -->
-                <div class="slideshow-container">
-                    <div class="slideshow-track">
-                        <img src="slide1.jpg" alt="Gallery image 1" class="slide-image">
-                        <img src="slide1.jpg" alt="Gallery image 2" class="slide-image">
-                        <img src="slide1.jpg" alt="Gallery image 3" class="slide-image">
+                    <div class="top-animation-container">
+                        <img
+                            src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp"
+                            alt="Cute rabbit animation"
+                            class="top-animation animation-subject"
+                        />
+                        <img
+                            src="https://cdn.discordapp.com/avatar-decoration-presets/a_1953da70cb693d9a27178eca180f8cb5.png"
+                            alt="Bakery decoration frame"
+                            class="top-animation animation-frame"
+                        />
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="media-player">
-            <div class="player-main-controls">
-                
-                <!-- This is the section we will style -->
-                <div class="progress-section">
-                    <img src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp" alt="Spinning thumbnail" id="spinning-thumbnail" class="player-thumbnail">
-                    
-                    <!-- This new div will group the bar and time -->
-                    <div class="progress-wrapper">
-                        <div id="progress-container" class="progress-container">
-                            <div id="progress-bar" class="progress-bar"></div>
+                    <h1>Michu</h1>
+                    <p class="bio">You're the only one I love..</p>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt"></i> Ho Chi Minh
+                    </div>
+                    <div class="profile-link">
+                        <img
+                            src="https://cdn.discordapp.com/avatars/639753897161916416/2e2892214122dbc022c0d410e7d9c38f.webp"
+                            alt="Profile Picture"
+                            class="profile-picture"
+                        />
+                        <div class="profile-info">
+                            <span class="username"
+                                >kimminhchau
+                                <i class="fas fa-check-circle verified-icon"></i
+                                ><i class="fa-solid fa-wand-magic-sparkles"></i
+                            ></span>
+                            <div class="status">
+                                <i class="fab fa-spotify"></i
+                                ><span>52 19 19 19 52</span>
+                            </div>
                         </div>
-                        <div class="time-display">
-                            <span id="current-time">0:00</span>
-                            <span id="total-duration">0:00</span>
+                    </div>
+                    <div class="social-links">
+                        <a
+                            href="https://facebook.com/shin.zeam"
+                            aria-label="Facebook"
+                            target="_blank"
+                            ><i class="fab fa-facebook-f"></i
+                        ></a>
+                        <a
+                            href="https://discord.com/users/639753897161916416"
+                            aria-label="Discord"
+                            target="_blank"
+                            ><i class="fab fa-discord"></i
+                        ></a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="profile-card">
+                    <img src="gallery.png" class="gallery-icon"></>
+                    <!-- START: NEW SLIDESHOW STRUCTURE -->
+                    <div class="slideshow-container">
+                        <div class="slideshow-track">
+                            <img
+                                src="slide1.jpg"
+                                alt="Gallery image 1"
+                                class="slide-image"
+                            />
+                            <img
+                                src="slide2.jpg"
+                                alt="Gallery image 2"
+                                class="slide-image"
+                            />
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="media-controls">
-                    <div id="volume-control-container">
-                        <button id="volume-btn" class="icon-btn" aria-label="Toggle Music">
-                            <i class="fas fa-volume-mute"></i>
+            <div class="media-player">
+                <div class="player-main-controls">
+                    <!-- This is the section we will style -->
+                    <div class="progress-section">
+                        <img
+                            src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp"
+                            alt="Spinning thumbnail"
+                            id="spinning-thumbnail"
+                            class="player-thumbnail"
+                        />
+
+                        <!-- This new div will group the bar and time -->
+                        <div class="progress-wrapper">
+                            <div
+                                id="progress-container"
+                                class="progress-container"
+                            >
+                                <div
+                                    id="progress-bar"
+                                    class="progress-bar"
+                                ></div>
+                            </div>
+                            <div class="time-display">
+                                <span id="current-time">0:00</span>
+                                <span id="total-duration">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media-controls">
+                        <div id="volume-control-container">
+                            <button
+                                id="volume-btn"
+                                class="icon-btn"
+                                aria-label="Toggle Music"
+                            >
+                                <i class="fas fa-volume-mute"></i>
+                            </button>
+                            <input
+                                type="range"
+                                id="volume-slider"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                value="0.5"
+                            />
+                        </div>
+                        <button
+                            id="play-pause-btn"
+                            class="icon-btn"
+                            aria-label="Toggle Play/Pause"
+                        >
+                            <i class="fas fa-play"></i>
                         </button>
-                        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
                     </div>
-                    <button id="play-pause-btn" class="icon-btn" aria-label="Toggle Play/Pause">
-                        <i class="fas fa-play"></i>
-                    </button>
                 </div>
             </div>
+        </main>
 
-        </div>
+        <footer>
+            <p class="brand-name">Michu</p>
+        </footer>
 
-    </main>
-
-    <footer>
-        <p class="brand-name">Michu</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>
