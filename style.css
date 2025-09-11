@@ -2,8 +2,8 @@
 :root {
     --bg-color: #fcefee;
     --text-color: #333;
-    --card-bg: rgba(252, 110, 188, 0.178);
-    --blur-effect: blur(15px);
+    --card-bg: rgba(255, 0, 140, 0.178);
+    --blur-effect: blur(5px);
     --border-radius-main: 24px;
     --border-radius-inner: 18px;
     --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -15,7 +15,7 @@ body {
     font-family: 'Nunito', sans-serif;
     color: var(--text-color);
     background-color: var(--bg-color);
-    background-image: url('background.webp'); 
+    background-image: url('background3.jpeg'); 
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -24,15 +24,43 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden; /* Prevent body scrolling */
 }
 
 #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-.main-container { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
+.main-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100vh; /* Make main container fill the viewport */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    gap: 1rem; /* Space between player and cards */
+}
 
-/* --- Card Slider --- */
-.card-slider { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none; }
-.card-slider::-webkit-scrollbar { display: none; }
+/* --- Card Slider (Mobile First - Vertical Scroll) --- */
+.card-slider {
+    display: flex;
+    flex-direction: column; /* Stack cards vertically */
+    overflow-y: auto;       /* Enable VERTICAL scrolling */
+    scroll-snap-type: y mandatory; /* Snap on the Y-axis */
+    
+    /* The container needs a defined height to be scrollable */
+    width: 100%;
+    height: 70vh; /* Adjust this value to control how much space the cards take */
+
+    gap: 5vh; /* Vertical gap between cards */
+    padding: 5vh 0; /* Vertical padding for start/end space */
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.card-slider::-webkit-scrollbar {
+    display: none;
+}
 
 .profile-card {
     position: relative;
@@ -44,14 +72,45 @@ body {
     box-shadow: var(--shadow);
     padding: 2.5rem 2rem;
     text-align: center;
-    flex: 0 0 90vw;
     width: 90vw;
     max-width: 380px;
-    margin: 0 5vw;
-    scroll-snap-align: center;
+    margin: 0 auto;
+    flex-shrink: 0;
+    scroll-snap-align: start;
 }
-.card-slider .profile-card:first-child { margin-left: 5vw; }
-.card-slider .profile-card:last-child { margin-right: 5vw; }
+
+.slideshow-container {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes the slideshow a perfect square */
+    border-radius: var(--border-radius-inner);
+    overflow: hidden; /* This is crucial - it hides the other images */
+    margin-top: 1rem;
+}
+
+.slideshow-track {
+    display: flex;
+    height: 100%;
+    transition: transform 1s ease-in-out; /* Smooth sliding animation */
+}
+
+.slide-image {
+    width: 100%; /* Each image takes up the full width of the track's container */
+    height: 100%;
+    object-fit: cover; /* Prevents images from stretching */
+}
+
+.slideshow-track.no-transition {
+    transition: none;
+}
+
+.slide-image {
+    height: 100%;
+    object-fit: cover;
+}
+
+#main-card {
+    order: -1;
+}
 
 .view-counter { position: absolute; bottom: 15px; left: 20px; font-size: 0.8rem; color: #555; opacity: 0.7; }
 .top-animation-container { position: relative; width: 150px; height: 150px; margin: 0 auto; margin-top: -30px; margin-bottom: 0.5rem; }
@@ -72,162 +131,67 @@ h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .social-links { display: flex; justify-content: center; gap: 15px; }
 .social-links a { color: #333; background-color: #fff; width: 40px; height: 40px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; text-decoration: none; font-size: 1.1rem; transition: transform 0.2s ease; }
 .social-links a:hover { transform: scale(1.1); }
+
 /* --- Glowing Icon Effect --- */
-.social-links a i {
-    /* Add a smooth transition for the color and shadow effect */
-    transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
-}
+.social-links a i { color: #fff; text-shadow: 0 0 5px #ff8fab, 0 0 10px #ff8fab, 0 0 20px #ff8fab; } { transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out; }
+.social-links a[aria-label="Facebook"]:hover i { color: #fff; text-shadow: 0 0 5px #fa7294, 0 0 10px #fa7294, 0 0 20px #fa7294; }
+.social-links a[aria-label="Discord"]:hover i { color: #fff; text-shadow: 0 0 5px #fa7294, 0 0 10px #fa7294, 0 0 20px #fa7294; }
 
-/* Facebook Icon Glow on Hover */
-.social-links a[aria-label="Discord"]:hover i {
-    color: #fff; /* Make the icon white to pop against the glow */
-    text-shadow:
-        0 0 5px #ff8fab,
-        0 0 10px #ff8fab,
-        0 0 20px #ff8fab;
-}
+footer { position: fixed; bottom: 0; text-align: center; padding: 10px; width: 100%; } /* Fixed footer for mobile */
+.brand-name { font-family: 'Pacifico', cursive; font-size: 2rem; color: #222; line-height: 1; }
 
-/* Discord Icon Glow on Hover */
-.social-links a[aria-label="Facebook"]:hover i {
-    color: #fff; /* Make the icon white to pop against the glow */
-    text-shadow:
-        0 0 5px #5865F2,
-        0 0 10px #5865F2,
-        0 0 20px #5865F2;
-}
-footer { position: absolute; bottom: 0; text-align: center; padding: 20px; }
-.brand-name { font-family: 'Pacifico', cursive; font-size: 2.5rem; color: #222; line-height: 1; }
 .icon-btn { background-color: rgba(255, 255, 255, 0.5); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); transition: transform 0.2s ease; flex-shrink: 0; }
 .icon-btn:hover { transform: scale(1.1); }
 
 /* --- Media Player Styles --- */
-.media-player {
-    position: relative;
-    z-index: 1;
-    width: 90vw;
-    max-width: 550px;
-    margin: 1.5rem auto 0;
-    background: var(--card-bg);
-    backdrop-filter: var(--blur-effect);
-    -webkit-backdrop-filter: var(--blur-effect);
-    border-radius: var(--border-radius-inner);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: var(--shadow);
-    padding: 1rem 1.5rem 1.5rem;
-}
-.progress-section {
-    display: flex; /* Arrange children (thumbnail, wrapper) horizontally */
-    align-items: center; /* Vertically center them */
-    gap: 15px; /* Add space between thumbnail and progress wrapper */
-}
-
-.progress-wrapper {
-    flex: 1; /* This is key: it makes the wrapper take all available space */
-}
-.media-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Puts volume on left, play on right */
-    margin-top: 1rem;
-    position: relative;
-    height: 50px;
-}
-
-.player-thumbnail {
-    width: 50px; /* Made slightly larger */
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.player-thumbnail {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-    /* 1. Define the animation directly on the element */
-    animation: spin 10s linear infinite;
-    
-    /* 2. Set its default state to paused */
-    animation-play-state: paused;
-}
-
-/* 3. The .spinning class now ONLY changes the play state to running */
-.player-thumbnail.spinning {
-    animation-play-state: running;
-}
-
-/* The animation definition remains the same */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-#play-pause-btn {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-}
-
-#volume-control-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
+.media-player { position: relative; z-index: 1; width: 90vw; max-width: 550px; background: var(--card-bg); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); border-radius: var(--border-radius-inner); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: var(--shadow); padding: 1rem 1.5rem; }
+.progress-section { display: flex; align-items: center; gap: 15px; }
+.progress-wrapper { flex: 1; }
+.media-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; position: relative; height: 50px; }
+.player-thumbnail { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); animation: spin 10s linear infinite; animation-play-state: paused; }
+.player-thumbnail.spinning { animation-play-state: running; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+#play-pause-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; font-size: 1.2rem; }
+#volume-control-container { display: flex; align-items: center; gap: 10px; }
 #volume-slider { -webkit-appearance: none; appearance: none; width: 0; height: 5px; background: rgba(255, 255, 255, 0.5); border-radius: 5px; outline: none; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, width 0.3s ease, visibility 0.3s; cursor: pointer; }
 #volume-control-container:hover #volume-slider { width: 80px; opacity: 1; visibility: visible; }
 #volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 #volume-slider::-moz-range-thumb { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-
-.time-display { 
-    display: flex; 
-    justify-content: space-between; 
-    font-size: 0.8rem; 
-    color: #555; 
-    padding: 0 5px;
-    margin-top: 0.5rem; /* Add margin-top instead of margin-bottom */
-}
-
-.progress-container { 
-    width: 100%; 
-    height: 8px; 
-    background-color: rgba(255, 255, 255, 0.5); 
-    border-radius: 10px; 
-    cursor: pointer; 
-    overflow: hidden; 
-}
-
-.progress-bar { 
-    width: 0%; 
-    height: 100%; 
-    background-color: #ff8fab; 
-    border-radius: 10px; 
-}
-
-/* --- NEW STYLES ADDED HERE --- */
-/* --- Icon Color Control --- */
-.icon-btn i {
-    color: #ff8fab; /* Default, slightly muted icon color */
-    transition: color 0.2s ease; /* Smooth transition for hover effect */
-}
-
-.icon-btn:hover i {
-    color: #ee6285; /* Bright, theme color on hover */
-}
-/* --- END OF NEW STYLES --- */
+.time-display { display: flex; justify-content: space-between; font-size: 0.8rem; color: #555; padding: 0 5px; margin-top: 0.5rem; }
+.progress-container { width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; cursor: pointer; overflow: hidden; }
+.progress-bar { width: 0%; height: 100%; background-color: #ff8fab; border-radius: 10px; }
+.icon-btn i { color: #f36e8f; transition: color 0.2s ease; }
+.icon-btn:hover i { color: #ff8fab; }
 
 /* --- Responsive Overrides for Desktop --- */
 @media (min-width: 1200px) {
-    .card-slider { overflow-x: visible; gap: 2rem; padding: 0 20px; }
-    .profile-card { flex: 1; margin: 0; }
-    .card-slider .profile-card:first-child, .card-slider .profile-card:last-child { margin: 0; }
+    body {
+        overflow: auto; /* Re-enable body scroll on desktop if needed */
+    }
+    .main-container {
+        height: auto; /* Allow container to grow with content */
+        flex-direction: column; /* Keep vertical stacking of player and cards */
+    }
+    footer {
+        position: absolute; /* Put footer back at the bottom */
+    }
+
+    /* Revert card slider to horizontal layout */
+    .card-slider {
+        flex-direction: row; /* Change back to horizontal */
+        overflow-y: visible;
+        overflow-x: visible;
+        height: auto;
+        width: auto;
+        gap: 2rem; /* Horizontal gap */
+        padding: 0 20px;
+    }
+
+    .profile-card {
+        flex: 1; /* Allow cards to grow */
+        margin: 0; /* Remove mobile margins */
+    }
+    #main-card {
+        order: 0;
+    }
 }

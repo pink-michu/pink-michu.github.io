@@ -3,12 +3,97 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 1 + 0.5; this.opacity = Math.random() * 0.5 + 0.2; } update() { this.y += this.speedY; if (this.y > canvas.height) { this.y = 0 - this.size; this.x = Math.random() * canvas.width; } } draw() { ctx.fillStyle = `rgba(50, 50, 50, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
-    function initParticles() { particles = []; const numberOfParticles = Math.floor(canvas.width / 40); for (let i = 0; i < numberOfParticles; i++) { particles.push(new Particle()); } }
-    function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (const particle of particles) { particle.update(); particle.draw(); } requestAnimationFrame(animateParticles); }
-    resizeCanvas(); initParticles(); animateParticles();
-    window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    class Particle {
+        constructor() {
+            // Set initial position and properties
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 5 + 2; // Snowflakes can be bigger
+            this.speedY = Math.random() * 1.5 + 0.5; // Varies falling speed
+            this.speedX = Math.random() * 2 - 1;   // Horizontal drift
+            this.opacity = Math.random() * 0.5 + 0.3;
+            
+            // Properties for rotation
+            this.angle = Math.random() * Math.PI * 2;
+            this.spin = (Math.random() - 0.5) * 0.02; // How fast and which direction it spins
+        }
+
+        update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            this.angle += this.spin;
+
+            // Reset particle when it goes off screen
+            if (this.y > canvas.height + this.size) {
+                this.y = 0 - this.size;
+                this.x = Math.random() * canvas.width;
+            }
+            if (this.x > canvas.width + this.size) {
+                this.x = 0 - this.size;
+            }
+            if (this.x < 0 - this.size) {
+                this.x = canvas.width + this.size;
+            }
+        }
+
+        draw() {
+            ctx.save(); // Save the current canvas state
+            
+            // Move the canvas origin to the particle's position for easy rotation
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
+            
+            // Set snowflake color
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+            ctx.lineWidth = 1.5;
+
+            // Draw the 6 arms of the snowflake
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (Math.PI / 3) * i;
+                ctx.moveTo(0, 0);
+                ctx.lineTo(0, this.size); // Draw the main arm
+                // You can add more lines here for more complex snowflakes
+                ctx.rotate(Math.PI / 3); // Rotate for the next arm
+            }
+            
+            ctx.stroke(); // Use stroke for a delicate line-art look
+            ctx.restore(); // Restore the canvas state
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        // More particles for a snowier effect
+        const numberOfParticles = Math.floor(canvas.width / 15);
+        for (let i = 0; i < numberOfParticles; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const particle of particles) {
+            particle.update();
+            particle.draw();
+        }
+        requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        initParticles();
+    });
 
     // --- Audio and Volume Control ---
     const audio = document.getElementById('bg-music');
@@ -93,12 +178,57 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize icon state ---
     updatePlayPauseIcon();
 
+    const slideshowTrack = document.querySelector('.slideshow-track');
+    
+    if (slideshowTrack) {
+        const originalSlides = slideshowTrack.querySelectorAll('.slide-image');
+        const slideCount = originalSlides.length;
+        let currentIndex = 0;
 
-    // --- Center Main Card on Mobile (unchanged) ---
-    const cardSlider = document.querySelector('.card-slider');
-    const mainCard = document.getElementById('main-card');
-    if (cardSlider && mainCard && window.innerWidth < 1200) {
-        const scrollLeft = mainCard.offsetLeft - (cardSlider.offsetWidth / 2) + (mainCard.offsetWidth / 2);
-        cardSlider.scrollLeft = scrollLeft;
+        // 1. Clone the first slide and append it to the end
+        const firstClone = originalSlides[0].cloneNode(true);
+        slideshowTrack.appendChild(firstClone);
+        
+        // Get the new collection of all slides (including the clone)
+        const allSlides = slideshowTrack.querySelectorAll('.slide-image');
+        const totalSlides = allSlides.length;
+
+        // 2. Set the track and slide widths dynamically
+        slideshowTrack.style.width = `${totalSlides * 100}%`;
+        allSlides.forEach(slide => {
+            slide.style.width = `${100 / totalSlides}%`;
+        });
+
+        // 3. Listen for the end of the transition
+        slideshowTrack.addEventListener('transitionend', () => {
+            // If we are at the cloned slide (which is the last one)
+            if (currentIndex === slideCount) {
+                // Instantly jump back to the real first slide
+                slideshowTrack.classList.add('no-transition'); // Disable transition
+                currentIndex = 0; // Reset index
+                slideshowTrack.style.transform = `translateX(0%)`; // Jump
+                
+                // Use a tiny timeout to re-enable the transition AFTER the jump
+                setTimeout(() => {
+                    slideshowTrack.classList.remove('no-transition');
+                }, 50);
+            }
+        });
+
+        function nextSlide() {
+            // Move to the next index
+            currentIndex++;
+            
+            // Calculate the new position to move the track
+            const newTransformValue = -currentIndex * (100 / totalSlides);
+            
+            // Apply the transformation to slide the images
+            slideshowTrack.style.transform = `translateX(${newTransformValue}%)`;
+        }
+
+        // Change image every 3 seconds
+        setInterval(nextSlide, 3000);
     }
+
+
 });
