@@ -2,7 +2,7 @@
 :root {
     --bg-color: #fcefee;
     --text-color: #333;
-    --card-bg: rgba(255, 255, 255, 0.4);
+    --card-bg: rgba(252, 110, 188, 0.178);
     --blur-effect: blur(15px);
     --border-radius-main: 24px;
     --border-radius-inner: 18px;
@@ -15,7 +15,6 @@ body {
     font-family: 'Nunito', sans-serif;
     color: var(--text-color);
     background-color: var(--bg-color);
-    /* Make sure your background path is correct */
     background-image: url('background.webp'); 
     background-size: cover;
     background-position: center center;
@@ -29,24 +28,11 @@ body {
 }
 
 #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-.main-container, footer { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;}
-.main-container { padding: 20px 0; } /* Remove side padding */
+.main-container { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
 
-/* --- NEW: Card Slider --- */
-.card-slider {
-    display: flex;
-    flex-wrap: nowrap; /* Ensures cards stay in a single line */
-    overflow-x: auto; /* Enables horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    scroll-snap-type: x mandatory; /* Snaps cards into place */
-    
-    /* Hide scrollbar */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-.card-slider::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, and Opera */
-}
+/* --- Card Slider --- */
+.card-slider { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none; }
+.card-slider::-webkit-scrollbar { display: none; }
 
 .profile-card {
     position: relative;
@@ -58,15 +44,12 @@ body {
     box-shadow: var(--shadow);
     padding: 2.5rem 2rem;
     text-align: center;
-    
-    /* Mobile sizing */
-    flex: 0 0 90vw; /* Don't grow, don't shrink, base width is 90% of viewport */
+    flex: 0 0 90vw;
     width: 90vw;
-    max-width: 380px; /* Still cap the max width */
-    margin: 0 5vw; /* Creates space between cards */
-    scroll-snap-align: center; /* Center the card when snapping */
+    max-width: 380px;
+    margin: 0 5vw;
+    scroll-snap-align: center;
 }
-/* Center the first and last card correctly */
 .card-slider .profile-card:first-child { margin-left: 5vw; }
 .card-slider .profile-card:last-child { margin-right: 5vw; }
 
@@ -75,12 +58,10 @@ body {
 .top-animation { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .animation-subject { z-index: 1; }
 .animation-frame { z-index: 2; }
-
 h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .bio { font-size: 1rem; margin-bottom: 1rem; color: #555; }
 .location { font-size: 0.9rem; margin-bottom: 1.5rem; color: #555; }
 .location i { margin-right: 5px; }
-
 .profile-link { background: rgba(255, 255, 255, 0.5); border-radius: var(--border-radius-inner); padding: 10px; display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; text-align: left; }
 .profile-picture { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
 .username { font-weight: 700; }
@@ -88,70 +69,165 @@ h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.25rem; }
 .fa-wand-magic-sparkles { color: #a78bfa; }
 .status { font-size: 0.8rem; color: #555; display: flex; align-items: center; gap: 5px; }
 .status .fa-spotify { color: #1DB954; font-size: 1.2em; }
-
 .social-links { display: flex; justify-content: center; gap: 15px; }
 .social-links a { color: #333; background-color: #fff; width: 40px; height: 40px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; text-decoration: none; font-size: 1.1rem; transition: transform 0.2s ease; }
 .social-links a:hover { transform: scale(1.1); }
+/* --- Glowing Icon Effect --- */
+.social-links a i {
+    /* Add a smooth transition for the color and shadow effect */
+    transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
+}
 
+/* Facebook Icon Glow on Hover */
+.social-links a[aria-label="Discord"]:hover i {
+    color: #fff; /* Make the icon white to pop against the glow */
+    text-shadow:
+        0 0 5px #ff8fab,
+        0 0 10px #ff8fab,
+        0 0 20px #ff8fab;
+}
+
+/* Discord Icon Glow on Hover */
+.social-links a[aria-label="Facebook"]:hover i {
+    color: #fff; /* Make the icon white to pop against the glow */
+    text-shadow:
+        0 0 5px #5865F2,
+        0 0 10px #5865F2,
+        0 0 20px #5865F2;
+}
 footer { position: absolute; bottom: 0; text-align: center; padding: 20px; }
 .brand-name { font-family: 'Pacifico', cursive; font-size: 2.5rem; color: #222; line-height: 1; }
-
-#volume-control-container { position: fixed; top: 20px; left: 20px; z-index: 10; display: flex; align-items: center; gap: 10px; }
 .icon-btn { background-color: rgba(255, 255, 255, 0.5); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); transition: transform 0.2s ease; flex-shrink: 0; }
 .icon-btn:hover { transform: scale(1.1); }
-#volume-slider { -webkit-appearance: none; appearance: none; width: 0; height: 5px; background: rgba(255, 255, 255, 0.5); border-radius: 5px; outline: none; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, width 0.3s ease, visibility 0.3s; cursor: pointer; }
-#volume-control-container:hover #volume-slider { width: 100px; opacity: 1; visibility: visible; }
-#volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-#volume-slider::-moz-range-thumb { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
-/* --- NEW: Media Player Styles --- */
+/* --- Media Player Styles --- */
 .media-player {
     position: relative;
     z-index: 1;
     width: 90vw;
-    max-width: 380px;
-    margin: 1.5rem auto 0; /* Add space above the player */
+    max-width: 550px;
+    margin: 1.5rem auto 0;
+    background: var(--card-bg);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    border-radius: var(--border-radius-inner);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: var(--shadow);
+    padding: 1rem 1.5rem 1.5rem;
+}
+.progress-section {
+    display: flex; /* Arrange children (thumbnail, wrapper) horizontally */
+    align-items: center; /* Vertically center them */
+    gap: 15px; /* Add space between thumbnail and progress wrapper */
 }
 
-.time-display {
+.progress-wrapper {
+    flex: 1; /* This is key: it makes the wrapper take all available space */
+}
+.media-controls {
     display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: #555;
-    margin-bottom: 0.5rem;
+    align-items: center;
+    justify-content: space-between; /* Puts volume on left, play on right */
+    margin-top: 1rem;
+    position: relative;
+    height: 50px;
+}
+
+.player-thumbnail {
+    width: 50px; /* Made slightly larger */
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.player-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* 1. Define the animation directly on the element */
+    animation: spin 10s linear infinite;
+    
+    /* 2. Set its default state to paused */
+    animation-play-state: paused;
+}
+
+/* 3. The .spinning class now ONLY changes the play state to running */
+.player-thumbnail.spinning {
+    animation-play-state: running;
+}
+
+/* The animation definition remains the same */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+#play-pause-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+}
+
+#volume-control-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#volume-slider { -webkit-appearance: none; appearance: none; width: 0; height: 5px; background: rgba(255, 255, 255, 0.5); border-radius: 5px; outline: none; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, width 0.3s ease, visibility 0.3s; cursor: pointer; }
+#volume-control-container:hover #volume-slider { width: 80px; opacity: 1; visibility: visible; }
+#volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+#volume-slider::-moz-range-thumb { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+
+.time-display { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 0.8rem; 
+    color: #555; 
     padding: 0 5px;
+    margin-top: 0.5rem; /* Add margin-top instead of margin-bottom */
 }
 
-.progress-container {
-    width: 100%;
-    height: 8px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    cursor: pointer;
-    overflow: hidden; /* Ensures progress bar corners are rounded */
+.progress-container { 
+    width: 100%; 
+    height: 8px; 
+    background-color: rgba(255, 255, 255, 0.5); 
+    border-radius: 10px; 
+    cursor: pointer; 
+    overflow: hidden; 
 }
 
-.progress-bar {
-    width: 0%; /* Initially no progress */
-    height: 100%;
-    background-color: #ff8fab; /* A pink color that fits the theme */
-    border-radius: 10px;
+.progress-bar { 
+    width: 0%; 
+    height: 100%; 
+    background-color: #ff8fab; 
+    border-radius: 10px; 
 }
+
+/* --- NEW STYLES ADDED HERE --- */
+/* --- Icon Color Control --- */
+.icon-btn i {
+    color: #ff8fab; /* Default, slightly muted icon color */
+    transition: color 0.2s ease; /* Smooth transition for hover effect */
+}
+
+.icon-btn:hover i {
+    color: #ee6285; /* Bright, theme color on hover */
+}
+/* --- END OF NEW STYLES --- */
 
 /* --- Responsive Overrides for Desktop --- */
 @media (min-width: 1200px) {
-    .card-slider {
-        overflow-x: visible; /* Disable scrolling on desktop */
-        gap: 2rem; /* Add space between cards */
-        padding: 0 20px;
-    }
-
-    .profile-card {
-        flex: 1; /* Allow cards to grow equally */
-        margin: 0; /* Remove mobile margins */
-    }
-    .card-slider .profile-card:first-child,
-    .card-slider .profile-card:last-child {
-        margin: 0; /* Reset margins */
-    }
+    .card-slider { overflow-x: visible; gap: 2rem; padding: 0 20px; }
+    .profile-card { flex: 1; margin: 0; }
+    .card-slider .profile-card:first-child, .card-slider .profile-card:last-child { margin: 0; }
 }

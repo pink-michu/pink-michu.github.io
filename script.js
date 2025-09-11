@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Particle Animation (unchanged) ---
-    // ... (keep all the existing particle code here) ...
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -23,7 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const currentTimeEl = document.getElementById('current-time');
     const totalDurationEl = document.getElementById('total-duration');
-    
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playPauseIcon = playPauseBtn.querySelector('i');
+
+    const spinningThumbnail = document.getElementById('spinning-thumbnail');
+
     // --- Existing Volume Logic ---
     audio.volume = volumeSlider.value;
     function updateVolumeIcon() { if (audio.paused || audio.volume === 0) { volumeIcon.classList.remove('fa-volume-up'); volumeIcon.classList.add('fa-volume-mute'); } else { volumeIcon.classList.remove('fa-volume-mute'); volumeIcon.classList.add('fa-volume-up'); } }
@@ -33,7 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
     audio.addEventListener('pause', updateVolumeIcon);
 
     // --- NEW: Media Player Logic ---
-    
+
+    function updatePlayPauseIcon() {
+        if (audio.paused) {
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+        } else {
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        }
+    }
+
     // Helper function to format time in MM:SS
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
@@ -63,9 +75,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- NEW: Event Listeners for Media Player ---
+    playPauseBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            spinningThumbnail.classList.add('spinning'); // Add this line
+            audio.play().catch(e => console.error(e));
+        } else {
+            spinningThumbnail.classList.remove('spinning'); // Add this line
+            audio.pause();
+        }
+    });
+    audio.addEventListener('play', updatePlayPauseIcon);
+    audio.addEventListener('pause', updatePlayPauseIcon);
     audio.addEventListener('loadedmetadata', setDuration);
     audio.addEventListener('timeupdate', updateProgress);
     progressContainer.addEventListener('click', setProgress);
+
+    // --- Initialize icon state ---
+    updatePlayPauseIcon();
 
 
     // --- Center Main Card on Mobile (unchanged) ---
