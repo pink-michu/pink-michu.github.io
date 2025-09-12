@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   resizeCanvas(); initParticles(); animateParticles();
   window.addEventListener("resize", () => { resizeCanvas(); initParticles(); });
 
-  // --- Element Selections ---
+  // --- Element Selections (Unchanged) ---
   const audio = document.getElementById("bg-music");
   const startOverlay = document.getElementById("start-overlay");
   const volumeBtn = document.getElementById("volume-btn");
@@ -24,96 +24,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const playPauseIcon = playPauseBtn.querySelector("i");
   const spinningThumbnail = document.getElementById("spinning-thumbnail");
 
-  // --- Fading Logic Variables ---
+  // --- Audio Logic (Unchanged) ---
   let fadeInterval = null;
   let targetVolume = parseFloat(volumeSlider.value);
-
-  // --- Play/Pause Logic ---
-  function fadeInPlay() {
-    clearInterval(fadeInterval);
-    audio.volume = 0; // Start silently
-    
-    // Start playing the audio now that the user has interacted
-    audio.play().catch((e) => console.error("Playback was prevented.", e));
-
-    // Begin the fade-in interval
-    fadeInterval = setInterval(() => {
-      if (audio.volume < targetVolume - 0.05) {
-        audio.volume += 0.05;
-      } else {
-        audio.volume = targetVolume;
-        clearInterval(fadeInterval);
-      }
-    }, 50);
-  }
-
-  function fadeOutPause() {
-    clearInterval(fadeInterval);
-    targetVolume = audio.volume; // Store the volume before fading
-
-    fadeInterval = setInterval(() => {
-      if (audio.volume > 0.05) {
-        audio.volume -= 0.05;
-      } else {
-        audio.volume = 0;
-        audio.pause(); // Pause only when fully faded out
-        clearInterval(fadeInterval);
-      }
-    }, 50);
-  }
-
-  // THIS IS NOW THE *ONLY* PLACE THE PLAY/PAUSE ICON AND THUMBNAIL ARE UPDATED
-  function syncUIWithAudio() {
-    if (audio.paused) {
-      playPauseIcon.classList.remove("fa-pause");
-      playPauseIcon.classList.add("fa-play");
-      spinningThumbnail.classList.remove("spinning");
-    } else {
-      playPauseIcon.classList.remove("fa-play");
-      playPauseIcon.classList.add("fa-pause");
-      spinningThumbnail.classList.add("spinning");
-    }
-  }
-
-  // --- Volume Logic ---
+  function fadeInPlay() { clearInterval(fadeInterval); audio.volume = 0; audio.play().catch((e) => console.error("Playback was prevented.", e)); fadeInterval = setInterval(() => { if (audio.volume < targetVolume - 0.05) { audio.volume += 0.05; } else { audio.volume = targetVolume; clearInterval(fadeInterval); } }, 50); }
+  function fadeOutPause() { clearInterval(fadeInterval); targetVolume = audio.volume; fadeInterval = setInterval(() => { if (audio.volume > 0.05) { audio.volume -= 0.05; } else { audio.volume = 0; audio.pause(); clearInterval(fadeInterval); } }, 50); }
+  function syncUIWithAudio() { if (audio.paused) { playPauseIcon.classList.remove("fa-pause"); playPauseIcon.classList.add("fa-play"); spinningThumbnail.classList.remove("spinning"); } else { playPauseIcon.classList.remove("fa-play"); playPauseIcon.classList.add("fa-pause"); spinningThumbnail.classList.add("spinning"); } }
   audio.volume = targetVolume;
-  function updateVolumeIcon() {
-    if (audio.muted || audio.volume === 0) {
-      volumeIcon.classList.remove("fa-volume-up");
-      volumeIcon.classList.add("fa-volume-mute");
-    } else {
-      volumeIcon.classList.remove("fa-volume-mute");
-      volumeIcon.classList.add("fa-volume-up");
-    }
-  }
-
-  // --- Progress Bar & Time Logic ---
+  function updateVolumeIcon() { if (audio.muted || audio.volume === 0) { volumeIcon.classList.remove("fa-volume-up"); volumeIcon.classList.add("fa-volume-mute"); } else { volumeIcon.classList.remove("fa-volume-mute"); volumeIcon.classList.add("fa-volume-up"); } }
   function formatTime(seconds) { const minutes = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${minutes}:${secs.toString().padStart(2, "0")}`; }
   function updateProgress() { const { duration, currentTime } = audio; const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0; progressBar.style.width = `${progressPercent}%`; currentTimeEl.textContent = formatTime(currentTime); }
   function setDuration() { totalDurationEl.textContent = formatTime(audio.duration); }
   function setProgress(e) { const width = e.currentTarget.clientWidth; const clickX = e.offsetX; if (audio.duration) { audio.currentTime = (clickX / width) * audio.duration; } }
-
-  // --- Event Listeners ---
-  startOverlay.addEventListener('click', () => {
-    fadeInPlay();
-    startOverlay.classList.add('hidden');
-  }, { once: true });
-
-  playPauseBtn.addEventListener("click", () => {
-    audio.paused ? fadeInPlay() : fadeOutPause();
-  });
-
-  volumeBtn.addEventListener("click", () => {
-    audio.muted = !audio.muted;
-  });
-
-  volumeSlider.addEventListener("input", (e) => {
-    clearInterval(fadeInterval);
-    targetVolume = parseFloat(e.target.value);
-    audio.volume = targetVolume;
-    audio.muted = false;
-  });
-
+  startOverlay.addEventListener('click', () => { fadeInPlay(); startOverlay.classList.add('hidden'); }, { once: true });
+  playPauseBtn.addEventListener("click", () => { audio.paused ? fadeInPlay() : fadeOutPause(); });
+  volumeBtn.addEventListener("click", () => { audio.muted = !audio.muted; });
+  volumeSlider.addEventListener("input", (e) => { clearInterval(fadeInterval); targetVolume = parseFloat(e.target.value); audio.volume = targetVolume; audio.muted = false; });
   audio.addEventListener("play", syncUIWithAudio);
   audio.addEventListener("pause", syncUIWithAudio);
   audio.addEventListener("volumechange", updateVolumeIcon);
@@ -121,18 +47,29 @@ document.addEventListener("DOMContentLoaded", () => {
   audio.addEventListener("timeupdate", updateProgress);
   progressContainer.addEventListener("click", setProgress);
 
-  // --- Slideshow Logic ---
+  // --- UPDATED: Slideshow Logic with Page Visibility API ---
   const slideshowTrack = document.querySelector(".slideshow-track");
   if (slideshowTrack) {
+    let slideshowInterval = null; // Variable to hold the timer ID
     const originalSlides = slideshowTrack.querySelectorAll(".slide-image");
     const slideCount = originalSlides.length;
     let currentIndex = 0;
+
+    // --- Setup (Unchanged) ---
     const firstClone = originalSlides[0].cloneNode(true);
     slideshowTrack.appendChild(firstClone);
     const allSlides = slideshowTrack.querySelectorAll(".slide-image");
     const totalSlides = allSlides.length;
     slideshowTrack.style.width = `${totalSlides * 100}%`;
     allSlides.forEach((slide) => { slide.style.width = `${100 / totalSlides}%`; });
+
+    function nextSlide() {
+      currentIndex++;
+      const newTransformValue = -currentIndex * (100 / totalSlides);
+      slideshowTrack.style.transform = `translateX(${newTransformValue}%)`;
+    }
+    
+    // --- Transition Reset Logic (Unchanged) ---
     slideshowTrack.addEventListener("transitionend", () => {
       if (currentIndex >= slideCount) {
         slideshowTrack.classList.add("no-transition");
@@ -141,7 +78,32 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { slideshowTrack.classList.remove("no-transition"); }, 50);
       }
     });
-    function nextSlide() { currentIndex++; const newTransformValue = -currentIndex * (100 / totalSlides); slideshowTrack.style.transform = `translateX(${newTransformValue}%)`; }
-    setInterval(nextSlide, 3000);
+
+    // --- NEW: Functions to control the timer ---
+    function startSlideshow() {
+      // Clear any existing timer to prevent duplicates
+      clearInterval(slideshowInterval);
+      // Start a new one
+      slideshowInterval = setInterval(nextSlide, 3000);
+    }
+
+    function stopSlideshow() {
+      clearInterval(slideshowInterval);
+    }
+
+    // --- NEW: Page Visibility API Listener ---
+    document.addEventListener('visibilitychange', () => {
+      // If the document is hidden, stop the slideshow
+      if (document.visibilityState === 'hidden') {
+        stopSlideshow();
+      } 
+      // If the document is visible again, restart it
+      else {
+        startSlideshow();
+      }
+    });
+
+    // --- Start the slideshow for the first time ---
+    startSlideshow();
   }
 });
