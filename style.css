@@ -180,6 +180,7 @@ h1 {
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
+    color: #fc5982;
 }
 .bio {
   font-family: "Rouge Script", cursive;
@@ -263,6 +264,13 @@ footer { position: fixed; bottom: 0; text-align: right; padding: 10px; width: 10
 
 a, button, input[type="range"], .progress-container, .icon-btn { 
     cursor: url('cursor2.png') 30 40, pointer;
+}
+
+h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #000000;
+    line-height: 1;
 }
 
 /* --- Responsive Overrides for Desktop --- */

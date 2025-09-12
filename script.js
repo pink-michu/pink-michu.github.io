@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Particle Animation ---
+  // --- Particle Animation (Unchanged) ---
   const canvas = document.getElementById("particle-canvas");
   const ctx = canvas.getContext("2d");
   let particles = [];
@@ -24,31 +24,61 @@ document.addEventListener("DOMContentLoaded", () => {
   const playPauseIcon = playPauseBtn.querySelector("i");
   const spinningThumbnail = document.getElementById("spinning-thumbnail");
 
+  // --- Fading Logic Variables ---
+  let fadeInterval = null;
+  let targetVolume = parseFloat(volumeSlider.value);
+
   // --- Play/Pause Logic ---
-  function playSong() {
-    spinningThumbnail.classList.add("spinning");
+  function fadeInPlay() {
+    clearInterval(fadeInterval);
+    audio.volume = 0; // Start silently
+    
+    // Start playing the audio now that the user has interacted
     audio.play().catch((e) => console.error("Playback was prevented.", e));
+
+    // Begin the fade-in interval
+    fadeInterval = setInterval(() => {
+      if (audio.volume < targetVolume - 0.05) {
+        audio.volume += 0.05;
+      } else {
+        audio.volume = targetVolume;
+        clearInterval(fadeInterval);
+      }
+    }, 50);
   }
 
-  function pauseSong() {
-    spinningThumbnail.classList.remove("spinning");
-    audio.pause();
+  function fadeOutPause() {
+    clearInterval(fadeInterval);
+    targetVolume = audio.volume; // Store the volume before fading
+
+    fadeInterval = setInterval(() => {
+      if (audio.volume > 0.05) {
+        audio.volume -= 0.05;
+      } else {
+        audio.volume = 0;
+        audio.pause(); // Pause only when fully faded out
+        clearInterval(fadeInterval);
+      }
+    }, 50);
   }
 
-  function updatePlayPauseIcon() {
+  // THIS IS NOW THE *ONLY* PLACE THE PLAY/PAUSE ICON AND THUMBNAIL ARE UPDATED
+  function syncUIWithAudio() {
     if (audio.paused) {
       playPauseIcon.classList.remove("fa-pause");
       playPauseIcon.classList.add("fa-play");
+      spinningThumbnail.classList.remove("spinning");
     } else {
       playPauseIcon.classList.remove("fa-play");
       playPauseIcon.classList.add("fa-pause");
+      spinningThumbnail.classList.add("spinning");
     }
   }
-  
+
   // --- Volume Logic ---
-  audio.volume = volumeSlider.value;
+  audio.volume = targetVolume;
   function updateVolumeIcon() {
-    if (audio.muted || audio.volume === 0) { // Changed condition to include muted state
+    if (audio.muted || audio.volume === 0) {
       volumeIcon.classList.remove("fa-volume-up");
       volumeIcon.classList.add("fa-volume-mute");
     } else {
@@ -58,53 +88,35 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- Progress Bar & Time Logic ---
-  function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
-  }
-
-  function updateProgress() {
-    const { duration, currentTime } = audio;
-    const progressPercent = (currentTime / duration) * 100;
-    progressBar.style.width = `${progressPercent}%`;
-    currentTimeEl.textContent = formatTime(currentTime);
-  }
-
-  function setDuration() {
-    totalDurationEl.textContent = formatTime(audio.duration);
-  }
-
-  function setProgress(e) {
-    const width = e.currentTarget.clientWidth;
-    const clickX = e.offsetX;
-    audio.currentTime = (clickX / width) * audio.duration;
-  }
+  function formatTime(seconds) { const minutes = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${minutes}:${secs.toString().padStart(2, "0")}`; }
+  function updateProgress() { const { duration, currentTime } = audio; const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0; progressBar.style.width = `${progressPercent}%`; currentTimeEl.textContent = formatTime(currentTime); }
+  function setDuration() { totalDurationEl.textContent = formatTime(audio.duration); }
+  function setProgress(e) { const width = e.currentTarget.clientWidth; const clickX = e.offsetX; if (audio.duration) { audio.currentTime = (clickX / width) * audio.duration; } }
 
   // --- Event Listeners ---
   startOverlay.addEventListener('click', () => {
-    playSong();
+    fadeInPlay();
     startOverlay.classList.add('hidden');
   }, { once: true });
 
   playPauseBtn.addEventListener("click", () => {
-    audio.paused ? playSong() : pauseSong();
+    audio.paused ? fadeInPlay() : fadeOutPause();
   });
 
   volumeBtn.addEventListener("click", () => {
     audio.muted = !audio.muted;
-    updateVolumeIcon();
   });
 
-  volumeSlider.addEventListener("input", () => {
-    audio.volume = volumeSlider.value;
-    audio.muted = false; // Unmute if user adjusts volume
-    updateVolumeIcon();
+  volumeSlider.addEventListener("input", (e) => {
+    clearInterval(fadeInterval);
+    targetVolume = parseFloat(e.target.value);
+    audio.volume = targetVolume;
+    audio.muted = false;
   });
-  
-  audio.addEventListener("play", updatePlayPauseIcon);
-  audio.addEventListener("pause", updatePlayPauseIcon);
-  audio.addEventListener("volumechange", updateVolumeIcon); // Listen for volume changes
+
+  audio.addEventListener("play", syncUIWithAudio);
+  audio.addEventListener("pause", syncUIWithAudio);
+  audio.addEventListener("volumechange", updateVolumeIcon);
   audio.addEventListener("loadedmetadata", setDuration);
   audio.addEventListener("timeupdate", updateProgress);
   progressContainer.addEventListener("click", setProgress);
@@ -120,24 +132,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const allSlides = slideshowTrack.querySelectorAll(".slide-image");
     const totalSlides = allSlides.length;
     slideshowTrack.style.width = `${totalSlides * 100}%`;
-    allSlides.forEach((slide) => {
-      slide.style.width = `${100 / totalSlides}%`;
-    });
+    allSlides.forEach((slide) => { slide.style.width = `${100 / totalSlides}%`; });
     slideshowTrack.addEventListener("transitionend", () => {
       if (currentIndex >= slideCount) {
         slideshowTrack.classList.add("no-transition");
         currentIndex = 0;
         slideshowTrack.style.transform = `translateX(0%)`;
-        setTimeout(() => {
-          slideshowTrack.classList.remove("no-transition");
-        }, 50);
+        setTimeout(() => { slideshowTrack.classList.remove("no-transition"); }, 50);
       }
     });
-    function nextSlide() {
-      currentIndex++;
-      const newTransformValue = -currentIndex * (100 / totalSlides);
-      slideshowTrack.style.transform = `translateX(${newTransformValue}%)`;
-    }
+    function nextSlide() { currentIndex++; const newTransformValue = -currentIndex * (100 / totalSlides); slideshowTrack.style.transform = `translateX(${newTransformValue}%)`; }
     setInterval(nextSlide, 3000);
   }
 });
