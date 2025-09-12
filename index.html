@@ -22,8 +22,14 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
+        <link href="https://fonts.googleapis.com/css2?family=Rouge+Script&display=swap" rel="stylesheet">
     </head>
     <body>
+        <div id="start-overlay">
+            <div class="start-box">
+                <h1>Click me</h1>
+            </div>
+        </div>
         <canvas id="particle-canvas"></canvas>
 
         <audio id="bg-music" loop src="music.mp3"></audio>
@@ -35,15 +41,15 @@
                     <h2 style="font-size: 2rem; margin-bottom: 1rem">
                         About Me
                     </h2>
-                    <ul>
-                        <li>Best riven</ul>
-                        <li>Birthday 0502</li>
-                        <li>Meat lover</li>
-                        <li>Siêu mid địa cầu</li>
-                        <li>Trùm top sv</li>
-                        <li>Người được Riven chọn</li>
-                        <li>Bán cơm sườn</li>
-                        <li>Yêu khoa học</p>
+                    <ul class="about-me-list">
+                        <li><i class="fas fa-crown"></i><span>Best Riven</span></li>
+                        <li><i class="fas fa-birthday-cake"></i><span>Birthday 0502</span></li>
+                        <li><i class="fas fa-drumstick-bite"></i><span>Meat lover</span></li>
+                        <li><i class="fas fa-gamepad"></i><span>Siêu mid địa cầu</span></li>
+                        <li><i class="fas fa-star"></i><span>Trùm top sv</span></li>
+                        <li><i class="fas fa-hand-sparkles"></i><span>Người được Riven chọn</span></li>
+                        <li><i class="fas fa-utensils"></i><span>Bán cơm sườn</span></li>
+                        <li><i class="fas fa-flask"></i><span>Yêu khoa học</span></li>
                     </ul>
 
                 </div>
@@ -54,7 +60,7 @@
                     </div>
                     <div class="top-animation-container">
                         <img
-                            src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp"
+                            src="profile.webp"
                             alt="Cute rabbit animation"
                             class="top-animation animation-subject"
                         />
@@ -82,7 +88,7 @@
                                 ><i class="fa-solid fa-wand-magic-sparkles"></i
                             ></span>
                             <div class="status">
-                                <i class="fab fa-spotify"></i
+                                <i class="fas fa-music"></i
                                 ><span>52 19 19 19 52</span>
                             </div>
                         </div>
@@ -128,7 +134,7 @@
                     <!-- This is the section we will style -->
                     <div class="progress-section">
                         <img
-                            src="https://r2.guns.lol/193a8872-80bc-4252-8584-ea6b3f65bab3.webp"
+                            src="profile.webp"
                             alt="Spinning thumbnail"
                             id="spinning-thumbnail"
                             class="player-thumbnail"

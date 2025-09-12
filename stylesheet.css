@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Peach Days';
+    src: url('PeachDays.woff2') format('woff2'),
+        url('PeachDays.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
