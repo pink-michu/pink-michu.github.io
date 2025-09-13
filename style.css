@@ -109,11 +109,10 @@ body {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
-.profile-card h1,
 .profile-card .bio,
 .profile-card .location,
 .about-me-list li {
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.4);
 }
 .bio,
 .location,
@@ -181,15 +180,20 @@ h1 {
     font-weight: 700;
     margin-bottom: 0.25rem;
     color: #fc5982;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 1);
 }
 .bio {
-  font-family: "Rouge Script", cursive;
+  font-family: "Sirivennela", sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 2.0rem;
+  font-size: 2rem;
+  font-weight: 700;
 }
 .bio, .location {
     padding-bottom: 10px;
+}
+.profile-card h2 {
+    text-shadow: 1px 1px 10px rgb(255, 0, 212);
 }
 .location i { margin-right: 5px; }
 .profile-link { background: rgba(255, 255, 255, 0.5); border-radius: var(--border-radius-inner); padding: 10px; display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; text-align: left; }
