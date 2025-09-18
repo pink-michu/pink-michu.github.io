@@ -106,4 +106,33 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { stopSlideshow(); } else { startSlideshow(); } });
     startSlideshow();
   }
+
+  const titles = [
+    "♡ Michu's Page ♡",
+    "૮ ´• ﻌ ´• ა",
+    "Welcome!",
+    "⸜(｡˃ ᵕ ˂ )⸝♡",
+  ];
+  let titleIndex = 0;
+
+  function changeTitle() {
+    document.title = titles[titleIndex];
+    titleIndex = (titleIndex + 1) % titles.length;
+  }
+
+  // Change the title every 2 seconds (2000 milliseconds)
+  setInterval(changeTitle, 2000);
+  const originalTitle = document.title;
+  const comeBackTitle = "Come back! (´• ω •`) ♡";
+
+  document.addEventListener('visibilitychange', () => {
+    // If the document is hidden (user is on another tab)
+    if (document.hidden) {
+      document.title = comeBackTitle;
+    } 
+    // If the document is visible again
+    else {
+      document.title = originalTitle;
+    }
+  });
 });
