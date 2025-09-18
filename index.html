@@ -33,7 +33,7 @@
         </div>
         <canvas id="particle-canvas"></canvas>
 
-        <audio id="bg-music" loop src="music.mp3"></audio>
+        <audio id="bg-music" loop src=""></audio>
 
         <main class="main-container">
             <div class="card-slider">
@@ -177,13 +177,17 @@
                                 value="0.5"
                             />
                         </div>
-                        <button
-                            id="play-pause-btn"
-                            class="icon-btn"
-                            aria-label="Toggle Play/Pause"
-                        >
-                            <i class="fas fa-play"></i>
-                        </button>
+                        <div class="player-middle-controls">
+                            <button id="prev-btn" class="icon-btn" aria-label="Previous Song">
+                                <i class="fas fa-backward-step"></i>
+                            </button>
+                            <button id="play-pause-btn" class="icon-btn play-btn-large" aria-label="Toggle Play/Pause">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="next-btn" class="icon-btn" aria-label="Next Song">
+                                <i class="fas fa-forward-step"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

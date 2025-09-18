@@ -251,10 +251,22 @@ footer { position: fixed; bottom: 0; text-align: right; padding: 10px; width: 10
 .progress-section { display: flex; align-items: center; gap: 15px; }
 .progress-wrapper { flex: 1; }
 .media-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; position: relative; height: 50px; }
+.player-middle-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Make the play button slightly larger than the others */
+.play-btn-large {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+}
 .player-thumbnail { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); animation: spin 10s linear infinite; animation-play-state: paused; }
 .player-thumbnail.spinning { animation-play-state: running; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-#play-pause-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; font-size: 1.2rem; }
+/* #play-pause-btn { position: absolute; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; font-size: 1.2rem; } */
 #volume-control-container { display: flex; align-items: center; gap: 10px; }
 #volume-slider { -webkit-appearance: none; appearance: none; width: 0; height: 5px; background: rgba(255, 255, 255, 0.5); border-radius: 5px; outline: none; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, width 0.3s ease, visibility 0.3s; }
 #volume-control-container:hover #volume-slider { width: 80px; opacity: 1; visibility: visible; }
