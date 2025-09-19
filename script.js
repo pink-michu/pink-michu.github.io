@@ -113,26 +113,38 @@ document.addEventListener("DOMContentLoaded", () => {
     "Welcome!",
     "⸜(｡˃ ᵕ ˂ )⸝♡",
   ];
+  const comeBackTitle = "Come back! (´• ω •`) ♡";
   let titleIndex = 0;
+  let titleInterval = null;
 
   function changeTitle() {
     document.title = titles[titleIndex];
     titleIndex = (titleIndex + 1) % titles.length;
   }
 
-  // Change the title every 2 seconds (2000 milliseconds)
-  setInterval(changeTitle, 2000);
-  const originalTitle = document.title;
-  const comeBackTitle = "Come back! (´• ω •`) ♡";
+  function startTitleAnimation() {
+    // Clear any existing timer to prevent duplicates
+    clearInterval(titleInterval);
+    // Start a new one
+    titleInterval = setInterval(changeTitle, 2000);
+  }
+
+  function stopTitleAnimation() {
+    clearInterval(titleInterval);
+  }
 
   document.addEventListener('visibilitychange', () => {
-    // If the document is hidden (user is on another tab)
+    // If the document is hidden, stop the animation and show the "come back" message
     if (document.hidden) {
+      stopTitleAnimation();
       document.title = comeBackTitle;
     } 
-    // If the document is visible again
+    // If the document is visible again, restart the animation
     else {
-      document.title = originalTitle;
+      startTitleAnimation();
     }
   });
+
+  // Start the title animation for the first time
+  startTitleAnimation();
 });
